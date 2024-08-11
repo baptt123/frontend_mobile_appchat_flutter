@@ -8,64 +8,40 @@ class LoginUI extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      checkerboardOffscreenLayers: false,
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Trang đăng nhập'),
-          backgroundColor: Colors.blueAccent,
-        ),
-        body: Container(
-          width: 500,
-          height: 500,
-          color: Colors.white,
-          padding: EdgeInsets.all(25),
-          child: Column(
+      home: SafeArea(
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('Trang đăng nhập'),
+            backgroundColor: Color(0xFF42A5F5),
+          ),
+          body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            textDirection: TextDirection.ltr,
             children: <Widget>[
               Expanded(
-                flex: 2,
-                child: Center(
-                  heightFactor: 50,
-                  widthFactor: 50,
-                  child: Image.asset('asset/flutter_img.png'),
-                ),
-              ),
+                  flex: 1,
+                  child: Container(
+                    margin: EdgeInsets.only(
+                        left: 20, top: 200, bottom: 20, right: 20),
+                    child: TextField(
+                      controller: TextEditingController(),
+                      decoration: InputDecoration(
+                          hintText: 'Tài khoản',
+                          border: OutlineInputBorder(),
+                          fillColor: Colors.white),
+                    ),
+                  )),
               Expanded(
-                flex: 2,
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    textDirection: TextDirection.ltr,
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Expanded(
-                          child: TextField(
-                            keyboardType: TextInputType.text,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintText: 'Tài khoản',
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Expanded(
-                          child: TextField(
-                            keyboardType: TextInputType.text,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintText: 'Mật khẩu',
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+                  flex: 1,
+                  child: Container(
+                    margin: EdgeInsets.all(20),
+                    child: TextField(
+                      controller: TextEditingController(),
+                      decoration: InputDecoration(
+                          hintText: 'Mật khẩu ',
+                          border: OutlineInputBorder(),
+                          fillColor: Colors.white),
+                    ),
+                  )),
             ],
           ),
         ),

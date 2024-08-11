@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
+void main() {
+  runApp(new ChatUI());
+}
+
 class ChatUI extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => createState();
+  State<StatefulWidget> createState() => ChatUIState();
 }
 
 class ChatUIState extends State<ChatUI> {
@@ -28,44 +32,43 @@ class ChatUIState extends State<ChatUI> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return new MaterialApp(
-        home: Scaffold(
-      body: Center(
-        child:
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-          SizedBox(
-              height: 200,
-              width: 200,
+    return MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: Align(
+              alignment: Alignment.bottomCenter,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                textDirection: TextDirection.ltr,
                 children: <Widget>[
                   Expanded(
-                      flex: 2,
-                      child: Center(
-                        child: TextField(
-                          controller: edittext,
-                          decoration: InputDecoration(
-                              hintText: 'Nhập nội dung',
-                              border: OutlineInputBorder()),
+                    flex: 2,
+                    child: Container(
+                      child: TextField(
+                        controller: edittext,
+                        decoration: InputDecoration(
+                          hintText: 'Nhập nội dung',
+                          border: OutlineInputBorder(),
                         ),
-                      )),
+                      ),
+                    ),
+                  ),
                   Expanded(
-                      flex: 2,
-                      child: Container(
-                        margin: EdgeInsets.all(2.0),
-                        padding: EdgeInsets.all(2.0),
-                        child: FloatingActionButton(
-                          backgroundColor: Colors.blueAccent,
-                          hoverColor: Colors.lightBlueAccent,
-                          onPressed: () {},
-                        ),
-                      ))
+                    flex: 1,
+                    child: Container(
+                      margin: EdgeInsets.all(2.0),
+                      padding: EdgeInsets.all(2.0),
+                      child: FloatingActionButton(
+                        backgroundColor: Colors.blueAccent,
+                        hoverColor: Colors.lightBlueAccent,
+                        child: Text('Gửi'),
+                        onPressed: () {},
+                      ),
+                    ),
+                  ),
                 ],
-              ))
-        ]),
+              )),
+        ),
       ),
-    ));
+    );
   }
 }
