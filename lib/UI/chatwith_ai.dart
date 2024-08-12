@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
 void main() {
-  runApp(new ChatUI());
+  runApp(new ChatWithUI());
 }
 
-class ChatUI extends StatefulWidget {
+class ChatWithUI extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => ChatUIState();
+  State<StatefulWidget> createState() => ChatWithUIState();
 }
 
-class ChatUIState extends State<ChatUI> {
+class ChatWithUIState extends State<ChatWithUI> {
   var edittext = TextEditingController();
 
   String getAPIKEY() {
