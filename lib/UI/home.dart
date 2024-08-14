@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(new HomeUI());
+  runApp(HomeUI());
 }
 
 class HomeUI extends StatefulWidget {
@@ -26,14 +26,14 @@ class HomeUIState extends State<HomeUI> {
 
   Widget buildListPost() {
     return new Expanded(child: ListView.builder(itemBuilder: (context, index) {
-      Column(
+      return Column(
         children: <Widget>[
           buildProfile(),
           buildContent(),
           buildActionCommentAndReact()
         ],
       );
-    }));
+    },itemCount: 10));
   }
 
   Widget buildProfile() {
@@ -54,8 +54,9 @@ Widget buildActionCommentAndReact() {
   return Row(
     mainAxisAlignment: MainAxisAlignment.start,
     children: <Widget>[
-      IconButton(onPressed: () {}, icon: Icon(Icons.comment_rounded)),
-      IconButton(onPressed: () {}, icon: Icon(Icons.thumb_up))
+      IconButton(onPressed: () {}, icon: Icon(Icons.thumb_up)),
+      IconButton(onPressed: () {}, icon: Icon(Icons.comment_rounded))
+
     ],
   );
 }
