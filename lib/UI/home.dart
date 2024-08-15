@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_flutter/UI/story.dart';
 
 void main() {
   runApp(HomeUI());
@@ -18,22 +19,25 @@ class HomeUIState extends State<HomeUI> {
       child: Scaffold(
         appBar: AppBar(title: Text('Khám phá')),
         body: Column(
-          children: <Widget>[buildListPost()],
+          children: <Widget>[StoryUI(), buildListPost()],
         ),
       ),
     ));
   }
 
   Widget buildListPost() {
-    return new Expanded(child: ListView.builder(itemBuilder: (context, index) {
-      return Column(
-        children: <Widget>[
-          buildProfile(),
-          buildContent(),
-          buildActionCommentAndReact()
-        ],
-      );
-    },itemCount: 10));
+    return new Expanded(
+        child: ListView.builder(
+            itemBuilder: (context, index) {
+              return Column(
+                children: <Widget>[
+                  buildProfile(),
+                  buildContent(),
+                  buildActionCommentAndReact()
+                ],
+              );
+            },
+            itemCount: 10));
   }
 
   Widget buildProfile() {
@@ -56,7 +60,6 @@ Widget buildActionCommentAndReact() {
     children: <Widget>[
       IconButton(onPressed: () {}, icon: Icon(Icons.thumb_up)),
       IconButton(onPressed: () {}, icon: Icon(Icons.comment_rounded))
-
     ],
   );
 }
