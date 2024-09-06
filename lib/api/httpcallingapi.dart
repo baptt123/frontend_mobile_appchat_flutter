@@ -7,8 +7,10 @@ mixin class HttpCallingAPI {
         await get("localhost:8080/api/getdata/getposts" as Uri) as Response;
     if (response.statusCode == 200) {
       print(response.statusCode);
+      return Future.value();
     } else {
       print(response.statusCode);
+      return Future.value();
     }
   }
 }
