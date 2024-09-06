@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 void main() {
   runApp(ChatWithFriendUI());
@@ -10,6 +11,21 @@ class ChatWithFriendUI extends StatefulWidget {
 }
 
 class ChatWithFriendState extends State<ChatWithFriendUI> {
+  WebSocketChannel? _webSocketChannel;
+  int? listSize;// giả sử biến này là số lượng tin nhắn
+
+  TextEditingController editingController=TextEditingController();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _webSocketChannel = WebSocketChannel.connect(Uri.parse("websocket://localhostr:8080/app"));
+  }
+  @override
+  void dispose() {
+    _webSocketChannel?.sink.close();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -37,15 +53,15 @@ class ChatWithFriendState extends State<ChatWithFriendUI> {
 
   Widget buildListViewMessage() {
     return new ListView.builder(
-        itemCount: 10,
+        itemCount: listSize,
         itemBuilder: (BuildContext context, int index) {
           //nếu là index lẻ thì là tin nhắn của chính bạn
           if (index % 2 != 0) {
             return ListTile(
               leading: Icon(Icons.account_circle),
               title: Container(
-                margin: EdgeInsets.only(right:100),
-                  padding:EdgeInsets.only(right: 100),
+                margin: EdgeInsets.only(right: 100),
+                padding: EdgeInsets.only(right: 100),
                 decoration: BoxDecoration(
                     color: Colors.blueAccent,
                     borderRadius: BorderRadius.circular(20)),
@@ -56,8 +72,8 @@ class ChatWithFriendState extends State<ChatWithFriendUI> {
             return ListTile(
                 trailing: Icon(Icons.account_circle_outlined),
                 title: Container(
-                  margin: EdgeInsets.only(left:100),
-                  padding:EdgeInsets.only(left:100),
+                  margin: EdgeInsets.only(left: 100),
+                  padding: EdgeInsets.only(left: 100),
                   decoration: BoxDecoration(
                       color: Colors.blueAccent,
                       borderRadius: BorderRadius.circular(20)),
@@ -67,33 +83,42 @@ class ChatWithFriendState extends State<ChatWithFriendUI> {
           ;
         });
   }
-}
+  Widget buildPressMessage() {
+    return Container(
+      padding: EdgeInsets.all(8.0),
+      color: Colors.grey[200], // Thay đổi màu nền nếu cần
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: TextField(
+              controller:editingController,
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                hintText: 'Nhập tin nhắn',
+                border: OutlineInputBorder(),
 
-Widget buildPressMessage() {
-  return Container(
-    padding: EdgeInsets.all(8.0),
-    color: Colors.grey[200], // Thay đổi màu nền nếu cần
-    child: Row(
-      children: <Widget>[
-        Expanded(
-          child: TextField(
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              hintText: 'Nhập tin nhắn',
-              border: OutlineInputBorder(),
+              ),
             ),
           ),
-        ),
-        SizedBox(width: 8),
-        ElevatedButton(
-          onPressed: () {
-            // Xử lý khi nhấn nút
-            print('Send button pressed');
-          },
-          child: Icon(Icons.send),
-        ),
-      ],
-    ),
-  );
+          SizedBox(width: 8),
+          ElevatedButton(
+            onPressed: () {
+              // Xử lý khi nhấn nút
+              if(!editingController.text.isEmpty)
+                _webSocketChannel?.sink.add(editingController.text);
+                editingController.clear();
+                setState(() {
+                  listSize;
+                });
+              print('Send button pressed');
+            },
+            child: Icon(Icons.send),
+          ),
+        ],
+      ),
+    );
+  }
+
+
 }
 
