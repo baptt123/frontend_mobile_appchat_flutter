@@ -11,15 +11,20 @@ class AddPost extends StatelessWidget {
     return MaterialApp(
       home: SafeArea(
         child: Scaffold(
-          bottomNavigationBar: ConvexAppBar(
-            items: [
-              TabItem(icon: Icons.camera_alt, title: "Máy ảnh"),
-              TabItem(icon: Icons.add_a_photo, title: "Thêm ảnh có sẵn"),
-              TabItem(icon: Icons.video_call_rounded, title: "Video"),
-              TabItem(
-                  icon: Icons.videocam_off_sharp, title: "Thêm video có sẵn")
-            ],
-          ),
+          // bottomNavigationBar: ConvexAppBar(
+          //   items: [
+          //     TabItem(icon: Icons.camera_alt, title: "Máy ảnh"),
+          //     TabItem(icon: Icons.add_a_photo, title: "Thêm ảnh có sẵn"),
+          //     TabItem(icon: Icons.video_call_rounded, title: "Video"),
+          //     TabItem(
+          //         icon: Icons.videocam_off_sharp, title: "Thêm video có sẵn")
+          //   ],
+          // )
+          persistentFooterButtons: [
+            IconButton(onPressed: (){}, icon: Icon(Icons.add_a_photo)),
+            IconButton(onPressed: (){},icon:Icon(Icons.location_on)),
+            IconButton(onPressed: (){}, icon: Icon(Icons.video_call_outlined))
+          ],
           appBar: AppBar(
             backgroundColor: Colors.lightBlue,
             title: Text("Thêm bài viết"),
@@ -29,18 +34,21 @@ class AddPost extends StatelessWidget {
               icon: Icon(Icons.arrow_back_sharp),
             ),
           ),
-          body: Column(
-            children: [
-              Container(
-                child: Text('Bạn đang nghĩ gì'),
-              ),
-              Expanded(child: Column(
-                children: (listImage == null || listImage.isEmpty)
-                    ? []
-                    : [for (var i in listImage) Image.network(i as String)],
-              ))
-
-            ],
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(16),
+                  child: Text('Bạn đang nghĩ gì'),
+                ),
+                if (listImage != null && listImage.isNotEmpty)
+                  Column(
+                    children: [
+                      for (var i in listImage) Image.network(i.toString()),
+                    ],
+                  )
+              ],
+            ),
           ),
         ),
       ),
