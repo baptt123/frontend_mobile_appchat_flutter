@@ -1,4 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:project_flutter/model/message.dart';
+import 'package:stomp_dart_client/stomp_dart_client.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 void main() {
@@ -11,21 +16,68 @@ class ChatWithFriendUI extends StatefulWidget {
 }
 
 class ChatWithFriendState extends State<ChatWithFriendUI> {
-  WebSocketChannel? _webSocketChannel;
-  int? listSize;// giả sử biến này là số lượng tin nhắn
+  StompClient? stompClient;
+  int? listSize; // giả sử biến này là số lượng tin nhắn
 
-  TextEditingController editingController=TextEditingController();
+  TextEditingController editingController = TextEditingController();
+
+  get text => null;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _webSocketChannel = WebSocketChannel.connect(Uri.parse("websocket://localhostr:8080/app"));
+    stompClient = StompClient(
+      config: StompConfig(
+        url: 'ws://192.168.67.105:8080/ws',
+        // Địa chỉ IP của máy tính chạy server
+        onConnect: onConnect,
+        onWebSocketError: (dynamic error) => print(error.toString()),
+      ),
+    );
+    stompClient?.activate();
   }
+
+  void onConnect(StompFrame frame) {
+    stompClient?.subscribe(
+      destination: '/topic/message',
+      callback: (frame) {
+        if (frame.body != null) {
+          print(frame.body);
+        }
+      },
+    );
+  }
+
+  void sendMessage() {
+    if (editingController.text.isNotEmpty && stompClient?.connected == true) {
+      Message message = Message(id: 1, content: editingController.text);
+      stompClient?.send(
+        destination: '/app/chat',
+        body: jsonEncode(message.toJson()),
+      );
+    } else {
+      Fluttertoast.showToast(
+        msg: "Không thể gửi tin nhắn, kết nối chưa được thiết lập",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.pinkAccent,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    }
+  }
+
+
   @override
   void dispose() {
-    _webSocketChannel?.sink.close();
+    stompClient?.deactivate(); // Hủy kết nối STOMP khi widget bị hủy
+    editingController.dispose(); // Đừng quên dispose TextEditingController
     super.dispose();
   }
+
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -53,7 +105,7 @@ class ChatWithFriendState extends State<ChatWithFriendUI> {
 
   Widget buildListViewMessage() {
     return new ListView.builder(
-        itemCount: listSize,
+        itemCount: 10,
         itemBuilder: (BuildContext context, int index) {
           //nếu là index lẻ thì là tin nhắn của chính bạn
           if (index % 2 != 0) {
@@ -83,6 +135,7 @@ class ChatWithFriendState extends State<ChatWithFriendUI> {
           ;
         });
   }
+
   Widget buildPressMessage() {
     return Container(
       padding: EdgeInsets.all(8.0),
@@ -91,12 +144,11 @@ class ChatWithFriendState extends State<ChatWithFriendUI> {
         children: <Widget>[
           Expanded(
             child: TextField(
-              controller:editingController,
+              controller: editingController,
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
                 hintText: 'Nhập tin nhắn',
                 border: OutlineInputBorder(),
-
               ),
             ),
           ),
@@ -104,13 +156,16 @@ class ChatWithFriendState extends State<ChatWithFriendUI> {
           ElevatedButton(
             onPressed: () {
               // Xử lý khi nhấn nút
-              if(!editingController.text.isEmpty)
-                _webSocketChannel?.sink.add(editingController.text);
-                editingController.clear();
-                setState(() {
-                  listSize;
-                });
-              print('Send button pressed');
+              sendMessage();
+              // Fluttertoast.showToast(
+              //     msg: "Đây là một toast!",
+              //     toastLength: Toast.LENGTH_SHORT,
+              //     gravity: ToastGravity.BOTTOM,
+              //     timeInSecForIosWeb: 1,
+              //     backgroundColor: Colors.black,
+              //     textColor: Colors.white,
+              //     fontSize: 16.0);
+              print('Thêm tin nhắn thành công');
             },
             child: Icon(Icons.send),
           ),
@@ -118,7 +173,4 @@ class ChatWithFriendState extends State<ChatWithFriendUI> {
       ),
     );
   }
-
-
 }
-
