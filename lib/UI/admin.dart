@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-
+void main(){
+  runApp(AdminUI());
+}
 class AdminUI extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => AdminUIState();
