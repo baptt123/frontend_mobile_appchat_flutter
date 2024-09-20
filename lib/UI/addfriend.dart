@@ -54,3 +54,6 @@ Widget buildListFriend() {
       },
       itemCount: 10);
 }
+void main(){
+  runApp(RunAddFriendUI());
+}

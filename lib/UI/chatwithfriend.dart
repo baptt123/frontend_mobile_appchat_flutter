@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:project_flutter/model/message.dart';
+import 'package:project_flutter/model/messageapp.dart';
 import 'package:stomp_dart_client/stomp_dart_client.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -51,7 +51,7 @@ class ChatWithFriendState extends State<ChatWithFriendUI> {
 
   void sendMessage() {
     if (editingController.text.isNotEmpty && stompClient?.connected == true) {
-      Message message = Message(id: 1, content: editingController.text);
+      MessageApp message = MessageApp(id: 1, content: editingController.text);
       stompClient?.send(
         destination: '/app/chat',
         body: jsonEncode(message.toJson()),

@@ -52,6 +52,7 @@ dependencies:
   fluttertoast: ^8.2.8
   stomp_dart_client: ^2.1.0
   convex_bottom_bar: ^3.2.0
+  mailer: ^6.0.0
 
 dev_dependencies:
   flutter_test:
